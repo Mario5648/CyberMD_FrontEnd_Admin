@@ -1,0 +1,10 @@
+.link_style
+{
+    text-decoration: none; 
+    color:white;
+}
+
+.link_style:hover
+{
+    color:red;
+}

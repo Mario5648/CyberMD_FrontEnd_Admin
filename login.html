@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/login.css">
+
+  <script src="./scripts/api_call.js"></script>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>Admin Dashboard</title>
+</head>
+<body class="login-body" onload="displayCaptcha()">
+    <div class="login-container">
+        <div class="login-form">
+            <!--Form input fields and labels-->
+            <label for="username">Username: </label><br>
+            <input type="text" placeholder="Username" id="username" required><br><br>
+            <label for="userPassword">Password: </label><br>
+            <input type="password" placeholder="Password" id="userPassword"required>
+            <div id="captcha_image"></div>
+            <div id="captcha_user">
+                <label for="captchaCodeInput">Enter Captcha Code (All Capitals)</label><br>
+                <input type="text" id="captchaCodeInput" name="captchaCodeInput">
+                <div id="captcha_refresh_container">
+                    <div class="captcha-menu-container">
+                        <div><p>Generate New Captcha</p></div><div><a onclick="displayCaptcha()"><i class="fa fa-refresh" style="font-size:24px"></i></a></div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            <button type="submit" onclick="logUserIn()">Login</button>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    function displayCaptcha()
+    {
+        const Http = new XMLHttpRequest();
+        params = {}
+
+        endpointCall("generateCaptcha", params, function(data)
+                                        {
+                                            if(data["status"] == "success")
+                                            {
+                                                let captcha_image = data["captchaImage"];
+                                                document.getElementById("captcha_image").innerHTML = `<img style="height:100px;" src="data:image/png;base64, `+captcha_image+`">`;
+                                                ca = data["cc"];
+                                            }
+                                            
+                                        }, 100);
+                                    
+
+
+    }
+
+    function verifyCaptcha()
+    {
+        if(ca === document.getElementById("captchaCodeInput").value)
+        {
+            return true;
+        }
+        alert("Incorrect Captcha! Please Try Again.");
+        return false;
+
+    }
+
+    function hash_password(user_password)
+    {
+        const utf8 = new TextEncoder().encode(user_password);
+        return crypto.subtle.digest('SHA-256', utf8).then((hashBuffer) => {
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            const hashHex = hashArray
+            .map((bytes) => bytes.toString(16).padStart(2, '0'))
+            .join('');
+            return hashHex;
+        });
+        
+    }
+
+    function logUserIn()
+    {
+
+        let captcha_verify = verifyCaptcha();
+        if(captcha_verify == false)
+        {
+            return;
+        }
+
+        let username = document.getElementById("username").value
+        let user_password = document.getElementById("userPassword").value
+
+        let hashed_password = '';
+        let i = hash_password(user_password).then((hex) => hashed_password = hex);
+        setTimeout(function(){
+            let params = {"username": username, "password":hashed_password};
+            endpointCall("login", params, function(data)
+                                        {
+                                            if(data["status"] == "success")
+                                            {
+                                                localStorage.setItem("CYBERMD_TOKEN_A", data["jwt"]);
+                                                localStorage.setItem("CYBERMD_USERNAME_A", username);
+
+                                                checkUserLogin();
+
+                                                return;
+                                            }else if(data["status"] == "failed")
+                                            {
+                                                alert("Email or Password is incorrect!");
+                                                checkUserLogin();
+                                                return;
+                                            }
+                                            
+                                            return;
+                                        });
+                                    }, 100);
+    }
+
+    function checkUserLogin()
+    {
+        let userToken = localStorage.getItem("CYBERMD_TOKEN_A");
+
+        if(userToken)
+        {
+            window.open("./index.html","_self");
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100%; /* Set the body height to 100% of the viewport height */
+    min-height: 100vh;
+  }
+
+  #container {
+    display: flex;
+    height:100%;
+
+  }
+
+  #sidebar {
+    width: 250px;
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    min-height: 100vh;
+
+  }
+
+  #content {
+    padding: 20px;
+
+  }
+
+  @media (max-width: 768px) {
+    #container {
+      flex-direction: column;
+    }
+
+    #sidebar {
+      width: 100%;
+    }
+  }

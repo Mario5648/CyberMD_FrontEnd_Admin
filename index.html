@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./styles/general_styles.css">
+  <link rel="stylesheet" href="./styles/text_styles.css">
+  <link rel="stylesheet" href="./styles/button_styles.css">
+  <link rel="stylesheet" href="./styles/analytics.css">
+  <link rel="stylesheet" href="./styles/modal.css">
+
+  <script src="./scripts/render_screen.js"></script>
+  <script src="./scripts/make_calls.js"></script>
+  <script src="./scripts/api_call.js"></script>
+  <script src="./scripts/utils.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>Admin Dashboard</title>
+</head>
+<body onload="checkUserLogin()">
+  <div id="container">
+    <div id="sidebar">
+      <img src="./images/cybermd_logo_new.png"></img>
+      <h2>Dashboard</h2>
+        <a href="./index.html" class="link_style"><i class="fa fa-home" style="font-size:20px"></i> Home</a><br><hr>
+        <a onclick="renderAnalyticsPage()" class="link_style"><i class="fa fa-bar-chart" style="font-size:20px"></i> Analytics</a><br><hr>
+        <a onclick="renderQuestionOptions()" class="link_style"><i class="fa fa-question" style="font-size:20px"></i> Questions</a><br><hr>
+        <a href="#" class="link_style"><i class="fa fa-envelope" style="font-size:20px"></i> Messages</a><br><hr>
+        <a onclick="logout()" class="link_style">Logout</a><br><hr>
+
+    </div>
+    <div id="content">
+      <h2>Welcome!</h2>
+      <p>Admin home screen for Cyber MD</p>
+    </div>
+  </div>
+</body>
+<script>
+  function logout()
+  {
+      localStorage.removeItem("CYBERMD_TOKEN_A");
+      window.open("./login.html","_self");
+  }
+</script>
+
+</html>
