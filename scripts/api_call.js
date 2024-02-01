@@ -1,11 +1,11 @@
-var addSingleQuestionEndPoint = "http://127.0.0.1:5000/addSingleQuestion";
-var addQuestionThroughFileEndPoint = "http://127.0.0.1:5000/addQuestionsThroughFile";
-var editSingleQuestionEndPoint = "http://127.0.0.1:5000/editSingleQuestion";
-var searchQuestionEndPoint = "http://127.0.0.1:5000/searchQuestion";
-var loginEndPoint = "http://127.0.0.1:5000/login";
-var getAnalyticsEndPoint = "http://127.0.0.1:5000/getAnalytics";
-var deleteQuestionEndPoint = "http://127.0.0.1:5000/deleteQuestion";
-var generateCaptchaEndPoint = "http://127.0.0.1:5000/generate_captcha"
+var addSingleQuestionEndPoint = "https://api-admin-cybermd.com/addSingleQuestion";
+var addQuestionThroughFileEndPoint = "https://api-admin-cybermd.com/addQuestionsThroughFile";
+var editSingleQuestionEndPoint = "https://api-admin-cybermd.com/editSingleQuestion";
+var searchQuestionEndPoint = "https://api-admin-cybermd.com/searchQuestion";
+var loginEndPoint = "https://api-admin-cybermd.com/login";
+var getAnalyticsEndPoint = "https://api-admin-cybermd.com/getAnalytics";
+var deleteQuestionEndPoint = "https://api-admin-cybermd.com/deleteQuestion";
+var generateCaptchaEndPoint = "https://api-admin-cybermd.com/generate_captcha"
 
 var ERROR_FLAG = "ERROR";
 
