@@ -110,6 +110,7 @@ function addSingleQuestionAPICall()
                                     if(data["status"] == "success")
                                     {
                                         alert("Successfully added question!");
+                                        location.reload()
                                         return;
                                     }else if(data["status"] == "failed")
                                     {

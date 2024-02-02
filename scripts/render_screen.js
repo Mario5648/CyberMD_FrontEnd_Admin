@@ -131,7 +131,7 @@ function renderSingleQuestionAddition()
                                             <br>
 
                                             <label for="incorrectAnswerExplanation1">Incorrect Answer Explanation 1 :</label><br>
-                                            <textarea id="incorrectAnswerExplanation1" name="incorrectAnswerExplanation1" rows="4" cols="50"></textarea>
+                                            <textarea id="incorrectAnswerExplanation1" name="incorrectAnswerExplanation1" rows="4" cols="50"></textarea><br>
 
                                         </div>
                                         
