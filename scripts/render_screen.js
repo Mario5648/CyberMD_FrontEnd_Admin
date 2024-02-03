@@ -17,20 +17,60 @@ function renderQuestionOptions()
 
 function renderSearchQuestion()
 {
-    let editQuestionHtml = `
-                            <span>
-                                <h2>Edit Question</h2>
 
-                                <label for="questionId">Question Id :</label><br>
-                                <input id="questionId" type="text"></input>
 
-                                <br>
-                                <br>
-                                <button onclick="renderEditQuestion()">Search Question</button>
-                            </span>
-                            `;
+        //make api call
+        getAllQuestions( function(allQuestionsData)
+        {
+            
+    
+            if(allQuestionsData)
+            {
+    
+                let editQuestionHtml = `
+                                <span>
+                                    <h2>Edit Question</h2>
 
-    document.getElementById('content').innerHTML = editQuestionHtml;
+                                    <div>
+                                        <table id="allQuestionTable" class="display">
+                                            <thead>
+                                                <tr>
+                                                    <th>Question Id</th>
+                                                    <th>Category</th>
+                                                    <th>Question</th>
+                                                    <th>Edit Question</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </span>
+                `;
+
+                document.getElementById('content').innerHTML = editQuestionHtml;
+
+                index = 0;
+                let table = new DataTable('#allQuestionTable', {
+                responsive: true,
+                data: allQuestionsData,
+                columns: [
+                    { data: "QID" },
+                    { data: 'QUESTION_CATEGORY' },
+                    { data: 'QUESTION' },
+                    { 
+                        data: '',
+                        render: (data,type,row) => {
+                            index+=1;
+                            return `<button style="background-color:#3486eb;color:#FFF;border-style:none;padding-top: 10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" onclick='renderEditQuestion("${row["QID"]}")'>Edit Question</button>`;
+                        }
+                    }
+                ],
+
+                });
+    
+            }
+        });
+    
 }
 
 
@@ -176,7 +216,7 @@ fileInput.addEventListener('change', handleFileSelect);
 }
 
 
-function renderEditQuestion()
+function renderEditQuestion(questionId)
 {
 
     //make api call
@@ -195,7 +235,7 @@ function renderEditQuestion()
             fileInput.addEventListener('change', handleFileSelect);
 
         }
-    });
+    }, questionId = questionId);
 
 }
 
@@ -210,7 +250,6 @@ function populatefields(questionDataDictionary)
     let correctExplanation = questionDataDictionary["CORRECT_EXPLANATION"];
     let incorrectExplanation = questionDataDictionary["INCORRECT_EXPLANATION"];
     let image = questionDataDictionary["IMAGE"];
-    console.log(image)
     let questionReferences = JSON.parse(questionDataDictionary["QUESTION_REFERENCES"]);
     let testType = questionDataDictionary["TEST_TYPE"];
 
@@ -218,8 +257,8 @@ function populatefields(questionDataDictionary)
                                 <span>
                                     <h2>Edit a Single Question</h2>
                                     
-                                    <h4>Question Id : <span id="questionId">${qid}</span></h4><br><br>
-
+                                    <h4>Question Id : <span id="questionId">${qid}</span></h4>
+                                    <a onclick="renderSearchQuestion()"><i class="fa fa-arrow-circle-o-left" style="font-size:35px"></i></a><br><br><br><br>
 
                                     <div>
                                         <label for="questionCategory">Question Category :</label><br>

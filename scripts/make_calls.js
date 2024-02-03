@@ -215,10 +215,8 @@ function addQuestionsThroughFileCall()
 
 }
 
-function searchQuestion(callBack=null)
+function searchQuestion(callBack=null, questionId  = null)
 {
-    let questionId = String(document.getElementById("questionId").value);
-
 
     let params = {"questionId": questionId,"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), "username":localStorage.getItem("CYBERMD_USERNAME_A")};
 
@@ -272,6 +270,25 @@ function getAnalytics(callBack=null)
                                     }else if(data["status"] == "failed")
                                     {
                                         alert("Could not fetch analytics. Please try again.");
+                                        callBack(null); 
+                                    }
+                                });
+}
+
+function getAllQuestions(callBack=null)
+{
+    
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), "username":localStorage.getItem("CYBERMD_USERNAME_A")};
+
+    endpointCall("getAllQuestions", params, function(data)
+                                {
+                                    //Store id and name in cookies for later use
+                                    if(data["status"] == "success")
+                                    {
+                                        callBack(data["allQuestionData"]);
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Could not find question! Please make sure the id is correct.");
                                         callBack(null); 
                                     }
                                 });
