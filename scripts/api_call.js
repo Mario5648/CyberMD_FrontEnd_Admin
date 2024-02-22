@@ -7,6 +7,12 @@ var getAnalyticsEndPoint = "https://api-admin-cybermd.com/getAnalytics";
 var deleteQuestionEndPoint = "https://api-admin-cybermd.com/deleteQuestion";
 var generateCaptchaEndPoint = "https://api-admin-cybermd.com/generate_captcha";
 var getAllQuestionsEndPoint = "https://api-admin-cybermd.com/getAllQuestions";
+var getAllVideosEndPoint = "https://api-admin-cybermd.com/etAllVideos";
+var addVideoEndPoint = "https://api-admin-cybermd.com/addVideo";
+var getVideoEndPoint = "https://api-admin-cybermd.com/getVideo";
+var editVideoEndPoint = "https://api-admin-cybermd.com/editVideo";
+var deleteVideoEndPoint = "https://api-admin-cybermd.com/deleteVideo";
+
 
 var ERROR_FLAG = "ERROR";
 
@@ -55,5 +61,15 @@ function identifyEndPoint(endpoint=null)
             return generateCaptchaEndPoint;
         case "getAllQuestions":
             return getAllQuestionsEndPoint;
+        case "getAllVideos":
+            return getAllVideosEndPoint;
+        case "addVideo":
+            return addVideoEndPoint;
+        case "getVideo":
+            return getVideoEndPoint;
+        case "editVideo":
+            return editVideoEndPoint;
+        case "deleteVideo":
+            return deleteVideoEndPoint;
     }
 }

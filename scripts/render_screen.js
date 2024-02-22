@@ -547,3 +547,192 @@ function populateAnalyticsField(analyticsDataDictionary)
    return analyticsPageHtml
 
 }
+
+
+function renderVideosPage()
+{
+    //make api call
+    getAllVideos( function(allVideosData)
+    {
+        if(allVideosData)
+        {
+
+            let videoPageHtml = `
+                            <span>
+                                <h2>Videos</h2>
+                                <button onclick="renderAddVideoPage()" class="addVideoButton">Add Video</button><br><br>
+                                <div>
+                                    <table id="allVideosTable" class="display">
+                                        <thead>
+                                            <tr>
+                                                <th>Video Id</th>
+                                                <th>Video Title</th>
+                                                <th>Edit Video</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </span>
+            `;
+
+            document.getElementById('content').innerHTML = videoPageHtml;
+
+            index = 0;
+            let table = new DataTable('#allVideosTable', {
+            responsive: true,
+            data: allVideosData,
+            columns: [
+                { data: "VID" },
+                { data: 'TITLE' },
+                { 
+                    data: '',
+                    render: (data,type,row) => {
+                        index+=1;
+                        return `<button style="background-color:#3486eb;color:#FFF;border-style:none;padding-top: 10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" onclick='renderEditVideo("${row["VID"]}")'>Edit Video</button>`;
+                    }
+                }
+            ],
+
+            });
+
+        }
+    });
+}
+
+
+function renderAddVideoPage()
+{
+    let videoPageHtml = `
+                            <span>
+                                <h2>Add Video</h2>
+                                <div>   
+                                    <label for="videoCategory">Video Category :</label><br>
+                                    <select name="videoCategory" id="videoCategory">
+                                        <option value="Behavioral Health">Behavioral Health</option>
+                                        <option value="Biostats/Epidemiology">Biostats/Epidemiology</option>
+                                        <option value="Cardiovascular">Cardiovascular</option>
+                                        <option value="Endocrine">Endocrine</option>
+                                        <option value="Gastrointestinal">Gastrointestinal</option>
+                                        <option value="General Principles">General Principles</option>
+                                        <option value="Hematology/Oncology">Hematology/Oncology</option>
+                                        <option value="Immunology">Immunology</option>
+                                        <option value="Musculoskeletal/Dermatology">Musculoskeletal/Dermatology</option>
+                                        <option value="Multisystem Processes and Disorders">Multisystem Processes and Disorders</option>
+                                        <option value="Nervous System/Special Senses">Nervous System/Special Senses</option>
+                                        <option value="Renal">Renal</option>
+                                        <option value="Reproductive">Reproductive</option>
+                                        <option value="Respiratory">Respiratory</option>
+                                    </select><br><br>
+
+                                    
+
+                                    <label for="videoTitle">Video Title</label><br>
+                                    <input type="text" name="videoTitle" id="videoTitle"><br><br>
+
+                                    <label for="videoThumbnail">Video Thumbnail</label><br>
+                                    <input type="text" name="videoThumbnail" id="videoThumbnail"><br><br>
+
+                                    <label for="videoLink">Video Link</label><br>
+                                    <input type="text" name="videoLink" id="videoLink"><br><br>
+
+
+                                    <button onclick="addVideoCall()">Save Video</button>
+
+                                </div>
+                            </span>
+                        `;
+    document.getElementById('content').innerHTML = videoPageHtml;
+
+}
+
+function renderDeleteVideoModal(videoId)
+{
+    let renderModalHtml = `
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>Are you sure you want to delete video?</h2>
+                        <h3>Video Id : ${videoId}</h3><br><br>
+
+                        <button style="background-color:red;color:white;border-color:red;" onclick="deleteVideoApiCall('${videoId}')">Delete Question</button>
+                    </div>
+            
+                </div>
+    `;
+
+    document.getElementById('content').innerHTML += renderModalHtml;
+    document.getElementById("myModal").style.display = "block";
+
+    document.getElementsByClassName("close")[0].onclick = function() {
+        document.getElementById("myModal").style.display = "none";
+      };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("myModal")) {
+            document.getElementById("myModal").style.display = "none";
+        }
+    }
+
+}
+
+function renderEditVideo(videoId)
+{
+    //make api call
+    getVideo( function(videoData)
+    {
+        if(videoData)
+        {
+
+            let videoCategory = videoId.split(":")[1];
+            let videoThumbnail = videoData["THUMBNAIL"];
+            let videoLink = videoData["VIDEO_URL"];
+            let videoTitle = videoData["TITLE"];
+
+            let videoPageHtml = `
+                                    <span>
+                                    <h2>Edit Video</h2>
+                                    <div>   
+                                        <label for="videoCategory">Video Category :</label><br>
+                                        <select name="videoCategory" id="videoCategory" selected="${videoCategory}">
+                                            <option value="Behavioral Health" ${(videoCategory == "Behavioral Health" ? "selected":"")}>Behavioral Health</option>
+                                            <option value="Biostats/Epidemiology" ${(videoCategory == "Biostats/Epidemiology" ? "selected":"")}>Biostats/Epidemiology</option>
+                                            <option value="Cardiovascular" ${(videoCategory == "Cardiovascular" ? "selected":"")}>Cardiovascular</option>
+                                            <option value="Endocrine" ${(videoCategory == "Endocrine" ? "selected":"")}>Endocrine</option>
+                                            <option value="Gastrointestinal" ${(videoCategory == "Gastrointestinal" ? "selected":"")}>Gastrointestinal</option>
+                                            <option value="General Principles" ${(videoCategory == "General Principles" ? "selected":"")}>General Principles</option>
+                                            <option value="Hematology/Oncology" ${(videoCategory == "Hematology/Oncology" ? "selected":"")}>Hematology/Oncology</option>
+                                            <option value="Immunology" ${(videoCategory == "Immunology" ? "selected":"")}>Immunology</option>
+                                            <option value="Musculoskeletal/Dermatology" ${(videoCategory == "Musculoskeletal/Dermatology" ? "selected":"")}>Musculoskeletal/Dermatology</option>
+                                            <option value="Multisystem Processes and Disorders" ${(videoCategory == "Multisystem Processes and Disorders" ? "selected":"")}>Multisystem Processes and Disorders</option>
+                                            <option value="Nervous System/Special Senses" ${(videoCategory == "Nervous System/Special Senses" ? "selected":"")}>Nervous System/Special Senses</option>
+                                            <option value="Renal" ${(videoCategory == "Renal" ? "selected":"")}>Renal</option>
+                                            <option value="Reproductive" ${(videoCategory == "Reproductive" ? "selected":"")}>Reproductive</option>
+                                            <option value="Respiratory" ${(videoCategory == "Respiratory" ? "selected":"")}>Respiratory</option>
+                                        </select><br><br>
+
+                                        <label for="videoTitle">Video Title</label><br>
+                                        <input type="text" name="videoTitle" id="videoTitle" value="${videoTitle}"><br><br>
+
+                                        <label for="videoThumbnail">Video Thumbnail</label><br>
+                                        <input type="text" name="videoThumbnail" id="videoThumbnail" value="${videoThumbnail}"><br><br>
+
+                                        <label for="videoLink">Video Link</label><br>
+                                        <input type="text" name="videoLink" id="videoLink" value="${videoLink}"><br><br>
+
+
+                                        <button onclick="editVideoCall('${videoId}')">Save Changes</button>
+                                        <button onclick="renderDeleteVideoModal('${videoId}')">Delete Video</button>
+
+
+                                    </div>
+                                </span>
+            `;
+
+            document.getElementById('content').innerHTML = videoPageHtml;
+        }
+    }, videoId = videoId);
+}

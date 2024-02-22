@@ -293,3 +293,126 @@ function getAllQuestions(callBack=null)
                                     }
                                 });
 }
+
+function getAllVideos(callBack = null)
+{
+    
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), "username":localStorage.getItem("CYBERMD_USERNAME_A")};
+
+    endpointCall("getAllVideos", params, function(data)
+                                {
+                                    //Store id and name in cookies for later use
+                                    if(data["status"] == "success")
+                                    {
+                                        callBack(data["allVideoData"]);
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Could not find video! Error occured");
+                                        callBack(null); 
+                                    }
+                                });
+}
+
+function addVideoCall()
+{
+    let videoCategory = document.getElementById("videoCategory");
+    videoCategory = videoCategory.options[videoCategory.selectedIndex].text;
+
+    let videoThumbnail = document.getElementById("videoThumbnail").value;
+    let videoLink = document.getElementById("videoLink").value;
+    let videoTitle = document.getElementById("videoTitle").value;
+
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), 
+                  "username":localStorage.getItem("CYBERMD_USERNAME_A"),
+                  "videoCategory":videoCategory,
+                  "videoThumbnail":videoThumbnail, 
+                  "videoLink":videoLink,
+                  "videoTitle":videoTitle};
+
+    endpointCall("addVideo", params, function(data)
+                                {
+                                    //Store id and name in cookies for later use
+                                    if(data["status"] == "success")
+                                    {
+                                        alert("Successfully added video!");
+                                        location.reload();
+                                        return;
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Failed to add video!");
+                                        return; 
+                                    }
+                                });
+}
+
+function getVideo(callBack = null, videoId = null)
+{
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), 
+                  "username":localStorage.getItem("CYBERMD_USERNAME_A"),
+                  "videoId": videoId};
+
+    endpointCall("getVideo", params, function(data)
+                                {
+                                    if(data["status"] == "success")
+                                    {
+                                        callBack(data["allVideoData"][0]);
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Could not find video! Error occured");
+                                        callBack(null); 
+                                    }
+                                });
+}
+
+function editVideoCall(videoId = null)
+{
+    let videoCategory = document.getElementById("videoCategory");
+    videoCategory = videoCategory.options[videoCategory.selectedIndex].text;
+
+    let videoThumbnail = document.getElementById("videoThumbnail").value;
+    let videoLink = document.getElementById("videoLink").value;
+    let videoTitle = document.getElementById("videoTitle").value;
+
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), 
+                  "username":localStorage.getItem("CYBERMD_USERNAME_A"),
+                  "videoId":videoId,
+                  "videoCategory":videoCategory,
+                  "videoThumbnail":videoThumbnail, 
+                  "videoLink":videoLink,
+                  "videoTitle":videoTitle};
+
+    endpointCall("editVideo", params, function(data)
+                                {
+                                    //Store id and name in cookies for later use
+                                    if(data["status"] == "success")
+                                    {
+                                        alert("Successfully edited video!");
+                                        location.reload();
+                                        return;
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Failed to edited video!");
+                                        return; 
+                                    }
+                                });
+}
+
+function deleteVideoApiCall(videoId = null)
+{
+    let params = {"jwt":localStorage.getItem("CYBERMD_TOKEN_A"), 
+                  "username":localStorage.getItem("CYBERMD_USERNAME_A"),
+                  "videoId": videoId};
+
+    endpointCall("deleteVideo", params, function(data)
+                                {
+                                    if(data["status"] == "success")
+                                    {
+                                        alert("Successfully deleted video!");
+                                        location.reload();
+                                    }else if(data["status"] == "failed")
+                                    {
+                                        alert("Could not find video! Error occured");
+                                    }
+                                });
+}
+
