@@ -69,9 +69,14 @@ function handleFileSelect(event) {
 
 function addSingleQuestionAPICall()
 {
+    let overallCategory = document.getElementById("overallQuestionCategory");
+    overallCategory = overallCategory.options[overallCategory.selectedIndex].text;
 
     let questionCategory = document.getElementById("questionCategory");
     questionCategory = questionCategory.options[questionCategory.selectedIndex].text;
+
+    let subQuestionCategory = document.getElementById("subQuestionCategory");
+    subQuestionCategory = subQuestionCategory.options[subQuestionCategory.selectedIndex].text;
 
     let question = document.getElementById("question").value;
     let correctAnswer = document.getElementById("correctAnswer").value;
@@ -92,7 +97,10 @@ function addSingleQuestionAPICall()
 
     let testType = document.getElementById("testType").value;
 
-    let params = {"questionCategory":questionCategory, 
+    let params = {
+                  "overallCategory":overallCategory,
+                  "questionCategory":questionCategory, 
+                  "subQuestionCategory":subQuestionCategory,
                   "question":question,
                   "answers": shuffle(answers),
                   "correctAnswer":correctAnswer,
@@ -124,8 +132,14 @@ function editSingleQuestionAPICall()
 {
 
     let questionId = document.getElementById("questionId").innerHTML;
+    let overallCategory = document.getElementById("overallQuestionCategory");
+    overallCategory = overallCategory.options[overallCategory.selectedIndex].text;
+
     let questionCategory = document.getElementById("questionCategory");
     questionCategory = questionCategory.options[questionCategory.selectedIndex].text;
+
+    let subQuestionCategory = document.getElementById("subQuestionCategory");
+    subQuestionCategory = subQuestionCategory.options[subQuestionCategory.selectedIndex].text;
 
     let question = document.getElementById("question").value;
     let correctAnswer = document.getElementById("correctAnswer").value;
@@ -148,7 +162,9 @@ function editSingleQuestionAPICall()
 
     let params = {
                   "questionId":questionId,
+                  "overallCategory":overallCategory,
                   "questionCategory":questionCategory, 
+                  "subQuestionCategory":subQuestionCategory,
                   "question":question,
                   "answers":answers,
                   "correctAnswer":correctAnswer,

@@ -1,5 +1,136 @@
 var currentIncorrectAnswersCount = 1
-
+var CATEGORY_MAPPER = {
+    "General Principles":{
+                            "Biochemistry":
+                            [
+                                "Molecular",
+                                "Cellular",
+                                "Laboratory Techniques",
+                                "Genetics",
+                                "Nutrition",
+                                "Metabolism",
+                            ],
+                            "Microbiology":
+                            [
+                                "Basic bacteriology",
+                                "Clinical bacteriology",
+                                "Mycology",
+                                "Parasitology",
+                                "Virology",
+                                "Systems",
+                                "Antimicrobials",
+                            ],
+                            "Pathology":
+                            [
+                                "Cellular Injury",
+                                "Inflammation",
+                                "Neoplasia",
+                            ],
+                            "Pharmacology":
+                            [
+                                "Pharmacokinetics and Pharmacodynamics",
+                                "Autonomic Drugs",
+                                "Toxicities and Side Effects",
+                                "Miscellaneous",
+                            ],
+                            "Public Health Sciences":
+                            [
+                                "Epidemiology and Biostatistics",
+                                "Ethics",
+                                "Communication Skills",
+                                "Healthcare Delivery",
+                                "Quality and Safety",
+                            ],
+                            "Immunology":
+                            [
+                                "Lymphoid Structures",
+                                "Cellular Components",
+                                "Immune Responses",
+                                "Immunosuppressants",
+                            ],
+                        },
+    "Organ Systems":
+    {
+        "Cardiovascular":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Endocrine":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Gastrointestinal":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Hematology/Oncology":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Musculoskeletal/Dermatology":
+        [
+            "Anatomy and Physiology",
+            "Pathology",
+            "Dermatology",
+            "Pharmacology",
+        ],
+        "Nervous System/Special Senses":
+        [
+            "Embryology",
+            "Anatomy & Physiology",
+            "Pathology",
+            "Otology",
+            "Ophthalmology",
+            "Pharmacology",
+        ],
+        "Behavioral Health":
+        [
+            "Psychology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Renal":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Reproductive":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ],
+        "Respiratory":
+        [
+            "Embryology",
+            "Anatomy",
+            "Physiology",
+            "Pathology",
+            "Pharmacology",
+        ]
+    }
+}
 
 function renderQuestionOptions()
 {
@@ -99,6 +230,109 @@ function renderFileQuestionAddition()
     document.getElementById('content').innerHTML = questionFileHtml;
 }
 
+function renderQuestionCategorySelectionEmptyCategories(selectedQuestionCategory = null)
+{
+    let selectionHtml = ``;
+    let questionCategories = Object.keys(CATEGORY_MAPPER["General Principles"]).concat(Object.keys(CATEGORY_MAPPER["Organ Systems"]));
+    for(let i = 0; i < questionCategories.length; i ++)
+    {
+        if(selectedQuestionCategory == questionCategories[i])
+        {
+            selectionHtml += `<option value="${questionCategories[i]}" selected>${questionCategories[i]}</option>`;
+        }else
+        {
+            selectionHtml += `<option value="${questionCategories[i]}">${questionCategories[i]}</option>`;
+        }
+    }
+    document.getElementById("questionCategory").innerHTML = selectionHtml;
+}
+
+function renderVideoCategorySelectionEmptyCategories(selectedQuestionCategory = null)
+{
+    let selectionHtml = ``;
+    let questionCategories = Object.keys(CATEGORY_MAPPER["General Principles"]).concat(Object.keys(CATEGORY_MAPPER["Organ Systems"]));
+    for(let i = 0; i < questionCategories.length; i ++)
+    {
+        if(selectedQuestionCategory == questionCategories[i])
+        {
+            selectionHtml += `<option value="${questionCategories[i]}" selected>${questionCategories[i]}</option>`;
+        }else
+        {
+            selectionHtml += `<option value="${questionCategories[i]}">${questionCategories[i]}</option>`;
+        }
+    }
+    document.getElementById("videoCategory").innerHTML = selectionHtml;
+}
+
+function renderQuestionCategorySelection(selectedOverallCategory = null, selectedQuestionCategory = null)
+{
+    let overallCategory = "";
+    if(selectedOverallCategory == null)
+    {
+        overallCategory= document.getElementById("overallQuestionCategory");
+        overallCategory = overallCategory.options[overallCategory.selectedIndex].text;
+    }else
+    {
+        overallCategory = selectedOverallCategory;
+    }
+
+    let selectionHtml = ``;
+    let questionCategories = Object.keys(CATEGORY_MAPPER[overallCategory]);
+    for(let i = 0; i < questionCategories.length; i ++)
+    {
+        if(selectedQuestionCategory == questionCategories[i])
+        {
+            selectionHtml += `<option value="${questionCategories[i]}" selected>${questionCategories[i]}</option>`;
+        }else
+        {
+            selectionHtml += `<option value="${questionCategories[i]}">${questionCategories[i]}</option>`;
+        }
+    }
+    document.getElementById("questionCategory").innerHTML = selectionHtml;
+    if(selectedOverallCategory == null)
+    {
+        renderQuestionSubCategorySelection();
+    }
+}
+
+function renderQuestionSubCategorySelection(selectedOverallCategory = null, selectedQuestionCategory = null, selectedSubCategory = null)
+{
+    let overallCategory = "";
+    let questionCategory = "";
+    if(selectedOverallCategory == null)
+    {
+        overallCategory = document.getElementById("overallQuestionCategory");
+        overallCategory = overallCategory.options[overallCategory.selectedIndex].text;
+    }else
+    {
+        overallCategory = selectedOverallCategory;
+    }
+
+    if(selectedQuestionCategory == null)
+    {
+        questionCategory = document.getElementById("questionCategory");
+        questionCategory = questionCategory.options[questionCategory.selectedIndex].text;
+    }else
+    {
+        questionCategory = selectedQuestionCategory;
+    }
+
+    let subCategoryList = CATEGORY_MAPPER[overallCategory][questionCategory];
+
+    let optionsHtml = ``;
+    for(let i =0 ; i < subCategoryList.length; i++)
+    {
+        if(selectedSubCategory == subCategoryList[i])
+        {
+            optionsHtml += `<option value="${subCategoryList[i]}" selected>${subCategoryList[i]}</option>`;
+        }else
+        {
+            optionsHtml += `<option value="${subCategoryList[i]}">${subCategoryList[i]}</option>`;
+        }
+    }
+
+    document.getElementById('subQuestionCategory').innerHTML = optionsHtml;
+}
 
 function renderSingleQuestionAddition()
 {
@@ -107,24 +341,20 @@ function renderSingleQuestionAddition()
                                     <h2>Add a Single Question</h2>
                                     
                                     <div>
-                                        <label for="questionCategory">Question Category :</label><br>
-                                        <select name="questionCategory" id="questionCategory">
-                                            <option value="Behavioral Health">Behavioral Health</option>
-                                            <option value="Biostats/Epidemiology">Biostats/Epidemiology</option>
-                                            <option value="Cardiovascular">Cardiovascular</option>
-                                            <option value="Endocrine">Endocrine</option>
-                                            <option value="Gastrointestinal">Gastrointestinal</option>
+                                        <label for="overallQuestionCategory">Overall Question Category :</label><br>
+                                        <select name="overallQuestionCategory" id="overallQuestionCategory" onchange="renderQuestionCategorySelection()">
                                             <option value="General Principles">General Principles</option>
-                                            <option value="Hematology/Oncology">Hematology/Oncology</option>
-                                            <option value="Immunology">Immunology</option>
-                                            <option value="Musculoskeletal/Dermatology">Musculoskeletal/Dermatology</option>
-                                            <option value="Multisystem Processes and Disorders">Multisystem Processes and Disorders</option>
-                                            <option value="Nervous System/Special Senses">Nervous System/Special Senses</option>
-                                            <option value="Renal">Renal</option>
-                                            <option value="Reproductive">Reproductive</option>
-                                            <option value="Respiratory">Respiratory</option>
+                                            <option value="Organ Systems">Organ Systems</option>
+                                        </select><br><br>
+                                        <label for="questionCategory">Question Category :</label><br>
+                                        <select name="questionCategory" id="questionCategory" onchange="renderQuestionSubCategorySelection()">
                                         </select>
+                                        <br>
+                                        <br>
 
+                                        <label for="subQuestionCategory">Question Sub Category :</label><br>
+                                        <select name="subQuestionCategory" id="subQuestionCategory">
+                                        </select>
                                         <br>
                                         <br>
 
@@ -209,6 +439,8 @@ function renderSingleQuestionAddition()
                             `;
 
 document.getElementById('content').innerHTML = questionOptionHtml;
+renderQuestionCategorySelection();
+renderQuestionSubCategorySelection();
 const fileInput = document.getElementById('questionImage');
 
 fileInput.addEventListener('change', handleFileSelect);
@@ -228,8 +460,24 @@ function renderEditQuestion(questionId)
         {
 
             //populate fields with data
-            questionOptionHtml = populatefields(questionDataDictionary)
+            questionOptionHtml = populatefields(questionDataDictionary);
+
             document.getElementById('content').innerHTML = questionOptionHtml;
+
+            let overallCategory = questionDataDictionary["OVERALL_CATEGORY"];
+            let questionCategory = questionDataDictionary["QUESTION_CATEGORY"];
+            let subCategory = questionDataDictionary["SUB_CATEGORY"];
+            if(overallCategory != null && subCategory != null)
+            {
+                renderQuestionCategorySelection(overallCategory, questionCategory);
+                renderQuestionSubCategorySelection(overallCategory,questionCategory, subCategory);
+            }else
+            {
+                renderQuestionCategorySelectionEmptyCategories(questionCategory);
+            }
+
+
+
             const fileInput = document.getElementById('questionImage');
 
             fileInput.addEventListener('change', handleFileSelect);
@@ -243,7 +491,9 @@ function renderEditQuestion(questionId)
 function populatefields(questionDataDictionary)
 {
     let qid = questionDataDictionary["QID"];
+    let overallCategory = questionDataDictionary["OVERALL_CATEGORY"];
     let questionCategory = questionDataDictionary["QUESTION_CATEGORY"];
+    let subCategory = questionDataDictionary["SUB_CATEGORY"];
     let question = questionDataDictionary["QUESTION"];
     let answerChoices = questionDataDictionary["ANSWER_CHOICES"];
     let correctAnswer = questionDataDictionary["CORRECT_ANSWER"];
@@ -261,24 +511,21 @@ function populatefields(questionDataDictionary)
                                     <a onclick="renderSearchQuestion()"><i class="fa fa-arrow-circle-o-left" style="font-size:35px"></i></a><br><br><br><br>
 
                                     <div>
-                                        <label for="questionCategory">Question Category :</label><br>
-                                        <select name="questionCategory" id="questionCategory" selected="${questionCategory}">
-                                            <option value="Behavioral Health" ${(questionCategory == "Behavioral Health" ? "selected":"")}>Behavioral Health</option>
-                                            <option value="Biostats/Epidemiology" ${(questionCategory == "Biostats/Epidemiology" ? "selected":"")}>Biostats/Epidemiology</option>
-                                            <option value="Cardiovascular" ${(questionCategory == "Cardiovascular" ? "selected":"")}>Cardiovascular</option>
-                                            <option value="Endocrine" ${(questionCategory == "Endocrine" ? "selected":"")}>Endocrine</option>
-                                            <option value="Gastrointestinal" ${(questionCategory == "Gastrointestinal" ? "selected":"")}>Gastrointestinal</option>
-                                            <option value="General Principles" ${(questionCategory == "General Principles" ? "selected":"")}>General Principles</option>
-                                            <option value="Hematology/Oncology" ${(questionCategory == "Hematology/Oncology" ? "selected":"")}>Hematology/Oncology</option>
-                                            <option value="Immunology" ${(questionCategory == "Immunology" ? "selected":"")}>Immunology</option>
-                                            <option value="Musculoskeletal/Dermatology" ${(questionCategory == "Musculoskeletal/Dermatology" ? "selected":"")}>Musculoskeletal/Dermatology</option>
-                                            <option value="Multisystem Processes and Disorders" ${(questionCategory == "Multisystem Processes and Disorders" ? "selected":"")}>Multisystem Processes and Disorders</option>
-                                            <option value="Nervous System/Special Senses" ${(questionCategory == "Nervous System/Special Senses" ? "selected":"")}>Nervous System/Special Senses</option>
-                                            <option value="Renal" ${(questionCategory == "Renal" ? "selected":"")}>Renal</option>
-                                            <option value="Reproductive" ${(questionCategory == "Reproductive" ? "selected":"")}>Reproductive</option>
-                                            <option value="Respiratory" ${(questionCategory == "Respiratory" ? "selected":"")}>Respiratory</option>
-                                        </select>
 
+                                        <label for="overallQuestionCategory">Overall Question Category :</label><br>
+                                        <select name="overallQuestionCategory" id="overallQuestionCategory" onchange="renderQuestionCategorySelection()">
+                                            <option value="General Principles" ${(overallCategory == "General Principles" ? "selected":"")}>General Principles</option>
+                                            <option value="Organ Systems" ${(overallCategory == "Organ Systems" ? "selected":"")}>Organ Systems</option>
+                                        </select><br><br>
+                                        <label for="questionCategory">Question Category :</label><br>
+                                        <select name="questionCategory" id="questionCategory" onchange="renderQuestionSubCategorySelection()">
+                                        </select>
+                                        <br>
+                                        <br>
+
+                                        <label for="subQuestionCategory">Question Sub Category :</label><br>
+                                        <select name="subQuestionCategory" id="subQuestionCategory">
+                                        </select>
                                         <br>
                                         <br>
 
@@ -360,7 +607,6 @@ function populatefields(questionDataDictionary)
                                     <br>
                                 </span>
     `;
-
     return questionOptionHtml;
 }
 
@@ -609,20 +855,6 @@ function renderAddVideoPage()
                                 <div>   
                                     <label for="videoCategory">Video Category :</label><br>
                                     <select name="videoCategory" id="videoCategory">
-                                        <option value="Behavioral Health">Behavioral Health</option>
-                                        <option value="Biostats/Epidemiology">Biostats/Epidemiology</option>
-                                        <option value="Cardiovascular">Cardiovascular</option>
-                                        <option value="Endocrine">Endocrine</option>
-                                        <option value="Gastrointestinal">Gastrointestinal</option>
-                                        <option value="General Principles">General Principles</option>
-                                        <option value="Hematology/Oncology">Hematology/Oncology</option>
-                                        <option value="Immunology">Immunology</option>
-                                        <option value="Musculoskeletal/Dermatology">Musculoskeletal/Dermatology</option>
-                                        <option value="Multisystem Processes and Disorders">Multisystem Processes and Disorders</option>
-                                        <option value="Nervous System/Special Senses">Nervous System/Special Senses</option>
-                                        <option value="Renal">Renal</option>
-                                        <option value="Reproductive">Reproductive</option>
-                                        <option value="Respiratory">Respiratory</option>
                                     </select><br><br>
 
                                     
@@ -643,6 +875,7 @@ function renderAddVideoPage()
                             </span>
                         `;
     document.getElementById('content').innerHTML = videoPageHtml;
+    renderVideoCategorySelectionEmptyCategories();
 
 }
 
@@ -698,20 +931,7 @@ function renderEditVideo(videoId)
                                     <div>   
                                         <label for="videoCategory">Video Category :</label><br>
                                         <select name="videoCategory" id="videoCategory" selected="${videoCategory}">
-                                            <option value="Behavioral Health" ${(videoCategory == "Behavioral Health" ? "selected":"")}>Behavioral Health</option>
-                                            <option value="Biostats/Epidemiology" ${(videoCategory == "Biostats/Epidemiology" ? "selected":"")}>Biostats/Epidemiology</option>
-                                            <option value="Cardiovascular" ${(videoCategory == "Cardiovascular" ? "selected":"")}>Cardiovascular</option>
-                                            <option value="Endocrine" ${(videoCategory == "Endocrine" ? "selected":"")}>Endocrine</option>
-                                            <option value="Gastrointestinal" ${(videoCategory == "Gastrointestinal" ? "selected":"")}>Gastrointestinal</option>
-                                            <option value="General Principles" ${(videoCategory == "General Principles" ? "selected":"")}>General Principles</option>
-                                            <option value="Hematology/Oncology" ${(videoCategory == "Hematology/Oncology" ? "selected":"")}>Hematology/Oncology</option>
-                                            <option value="Immunology" ${(videoCategory == "Immunology" ? "selected":"")}>Immunology</option>
-                                            <option value="Musculoskeletal/Dermatology" ${(videoCategory == "Musculoskeletal/Dermatology" ? "selected":"")}>Musculoskeletal/Dermatology</option>
-                                            <option value="Multisystem Processes and Disorders" ${(videoCategory == "Multisystem Processes and Disorders" ? "selected":"")}>Multisystem Processes and Disorders</option>
-                                            <option value="Nervous System/Special Senses" ${(videoCategory == "Nervous System/Special Senses" ? "selected":"")}>Nervous System/Special Senses</option>
-                                            <option value="Renal" ${(videoCategory == "Renal" ? "selected":"")}>Renal</option>
-                                            <option value="Reproductive" ${(videoCategory == "Reproductive" ? "selected":"")}>Reproductive</option>
-                                            <option value="Respiratory" ${(videoCategory == "Respiratory" ? "selected":"")}>Respiratory</option>
+
                                         </select><br><br>
 
                                         <label for="videoTitle">Video Title</label><br>
@@ -733,6 +953,8 @@ function renderEditVideo(videoId)
             `;
 
             document.getElementById('content').innerHTML = videoPageHtml;
+            renderVideoCategorySelectionEmptyCategories(videoCategory);
         }
     }, videoId = videoId);
 }
+
